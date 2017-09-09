@@ -1,0 +1,19 @@
+{
+  "name": "deepl-translator",
+  "version": "1.0.0",
+  "description":
+    "This module provides promised methods for translating text using DeepL Translator (https://www.deepl.com/translator) undocumented API.",
+  "main": "index.js",
+  "repository": "https://github.com/vsetka/deepl-translator.git",
+  "homepage": "https://github.com/vsetka/deepl-translator#readme",
+  "author": "Vladimir Setka <vsetka@gmail.com>",
+  "license": "Apache License 2.0",
+  "keywords": ["deepl", "translator", "translate", "deep", "learning"],
+  "bugs": {
+    "url": "https://github.com/vsetka/deepl-translator/issues"
+  },
+  "engineStrict": true,
+  "engines": {
+    "node": ">=6.0.0"
+  }
+}
