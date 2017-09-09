@@ -4,6 +4,13 @@
   "description":
     "This module provides promised methods for translating text using DeepL Translator (https://www.deepl.com/translator) undocumented API.",
   "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "collectCoverage": "true"
+  },
+  "jest": {
+    "verbose": true
+  },
   "repository": "https://github.com/vsetka/deepl-translator.git",
   "homepage": "https://github.com/vsetka/deepl-translator#readme",
   "author": "Vladimir Setka <vsetka@gmail.com>",
@@ -15,5 +22,9 @@
   "engineStrict": true,
   "engines": {
     "node": ">=6.0.0"
+  },
+  "devDependencies": {
+    "coveralls": "^2.13.1",
+    "jest": "^21.0.2"
   }
 }
