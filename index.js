@@ -1,5 +1,5 @@
 const languages = require('./languages');
-const https = require('https');
+const requestHelper = require('./request-helper');
 
 const DEEPL_HOSTNAME = 'www.deepl.com';
 const DEEPL_ENDPOINT = '/jsonrpc';
@@ -27,20 +27,13 @@ function translate(text, targetLanguage, sourceLanguage = 'auto') {
       const postBody = getPostBody(text, targetLanguage, sourceLanguage);
       const options = getRequestOptions(postBody);
 
-      const req = https.request(options, res => {
-        res.setEncoding('utf8');
-        res.on('data', body => {
-          try {
-            resolve(parseResponse(body));
-          } catch (exception) {
-            reject(new Error(`Unexpected error when parsing body: ${body}`));
-          }
-        });
+      requestHelper(options, postBody).then(response => {
+        try {
+          resolve(transformResponse(response));
+        } catch (exception) {
+          reject(new Error(`Unexpected error when parsing response body: ${JSON.stringify(response)}`));
+        }
       });
-
-      req.on('error', reject);
-      req.write(JSON.stringify(postBody));
-      req.end();
     }
   });
 }
@@ -82,14 +75,14 @@ function getRequestOptions(postBody) {
   };
 }
 
-function parseResponse(response) {
+function transformResponse(response) {
   const {
     result: {
       target_lang: targetLanguage,
       source_lang: resolvedSourceLanguage,
       translations: [{ beams: [{ postprocessed_sentence: translation }] }],
     },
-  } = JSON.parse(response);
+  } = response;
 
   return {
     targetLanguage,
