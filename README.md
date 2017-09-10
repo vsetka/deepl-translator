@@ -34,7 +34,7 @@ yarn add deepl-translator
 ## Usage
 
 ```javascript
-const { translate, detectLanguage } = require('./index');
+const { translate, detectLanguage } = require('deepl-translator');
 
 // Translate text with explicit source and target languages
 translate('Die Übersetzungsqualität von deepl ist erstaunlich!', 'EN', 'DE')
