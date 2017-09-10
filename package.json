@@ -1,6 +1,6 @@
 {
   "name": "deepl-translator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description":
     "This module provides promised methods for translating text using DeepL Translator (https://www.deepl.com/translator) undocumented API.",
   "main": "index.js",
