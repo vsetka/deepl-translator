@@ -1,6 +1,17 @@
 # deepl-translator
 
+[![Coverage Status](https://coveralls.io/repos/github/vsetka/deepl-translator/badge.svg?branch=master)](https://coveralls.io/github/vsetka/deepl-translator?branch=master)
+[![Build Status](https://travis-ci.org/vsetka/deepl-translator.svg?branch=master)](https://travis-ci.org/vsetka/deepl-translator)
+[![Known Vulnerabilities](https://snyk.io/test/github/vsetka/deepl-translator/badge.svg)](https://snyk.io/test/github/vsetka/deepl-translator)
+
 This module provides promised methods for detecting language and translating text using DeepL Translator (https://www.deepl.com/translator) undocumented API.
+
+DeepL has done a great job with their deep learning translation model which outperforms the competition by a wide margin. An excerpt from their page on that topic:
+
+> ## Blind test
+> 100 sentences were translated by DeepL Translator, Google Translate, Microsoft Translator, and Facebook. Professional translators assessed the translations, without knowing which system produced which results. The translators preferred our translations over the competition's by a factor of 3:1. Here are the results of a test run in August 2017:
+
+![Stats](https://raw.githubusercontent.com/vsetka/deepl-translator/c0076cf2b7324c310725ea615bf972a6289ffe83/stats.png)
 
 # Supported languages:
 
