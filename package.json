@@ -5,7 +5,7 @@
     "This module provides promised methods for translating text using DeepL Translator (https://www.deepl.com/translator) undocumented API.",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "prettier-check './**/*.js' && jest",
     "coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
   },
   "jest": {
@@ -25,6 +25,8 @@
   },
   "devDependencies": {
     "coveralls": "^2.13.1",
-    "jest": "^21.0.2"
+    "jest": "^21.0.2",
+    "prettier": "^1.6.1",
+    "prettier-check": "^1.0.0"
   }
 }

@@ -6,7 +6,9 @@ module.exports = (options, postBody) => {
 
     process.nextTick(
       () =>
-        !translationMap[inputText] ? reject(new Error('This input should throw')) : resolve(translationMap[inputText])
+        !translationMap[inputText]
+          ? reject(new Error('This input should throw'))
+          : resolve(translationMap[inputText])
     );
   });
 };

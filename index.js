@@ -5,10 +5,10 @@ const DEEPL_HOSTNAME = 'www.deepl.com';
 const DEEPL_ENDPOINT = '/jsonrpc';
 
 function detectLanguage(text) {
-  return translate(text, 'EN').then(result => {
+  return translate(text, 'EN').then(({ resolvedSourceLanguage }) => {
     return {
-      languageCode: result.resolvedSourceLanguage,
-      languageName: languages[result.resolvedSourceLanguage],
+      languageCode: resolvedSourceLanguage,
+      languageName: languages[resolvedSourceLanguage],
     };
   });
 }
@@ -27,13 +27,21 @@ function translate(text, targetLanguage, sourceLanguage = 'auto') {
       const postBody = getPostBody(text, targetLanguage, sourceLanguage);
       const options = getRequestOptions(postBody);
 
-      requestHelper(options, postBody).then(response => {
-        try {
-          resolve(transformResponse(response));
-        } catch (exception) {
-          reject(new Error(`Unexpected error when parsing response body: ${JSON.stringify(response)}`));
-        }
-      });
+      requestHelper(options, postBody)
+        .then(response => {
+          try {
+            resolve(transformResponse(response));
+          } catch (exception) {
+            reject(
+              new Error(
+                `Unexpected error when parsing response body: ${JSON.stringify(
+                  response
+                )}`
+              )
+            );
+          }
+        })
+        .catch(reject);
     }
   });
 }

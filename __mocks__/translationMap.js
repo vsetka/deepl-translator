@@ -22,7 +22,8 @@ module.exports = {
         {
           beams: [
             {
-              postprocessed_sentence: 'This is a representative chunk of text in english.',
+              postprocessed_sentence:
+                'This is a representative chunk of text in english.',
             },
           ],
         },
