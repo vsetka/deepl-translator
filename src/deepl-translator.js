@@ -1,8 +1,6 @@
 const languages = require('./languages');
-const deeplApiHelper = require('./request-helper');
-
-const DEEPL_HOSTNAME = 'www.deepl.com';
-const DEEPL_ENDPOINT = '/jsonrpc';
+const deeplApiHelper = require('./deepl-api-helper');
+const { EOL } = require('os');
 
 function detectLanguage(text) {
   return translate(text, 'EN').then(({ resolvedSourceLanguage }) => {
@@ -13,7 +11,7 @@ function detectLanguage(text) {
   });
 }
 
-function translate(text, targetLanguage, sourceLanguage = 'auto') {
+function validateInputs(text, targetLanguage, sourceLanguage) {
   return new Promise((resolve, reject) => {
     if (sourceLanguage !== 'auto' && !languages[sourceLanguage]) {
       reject(new Error(`Invalid source language code ${sourceLanguage}`));
@@ -24,79 +22,81 @@ function translate(text, targetLanguage, sourceLanguage = 'auto') {
     } else if (typeof text !== 'string' || text.trim().length === 0) {
       reject(new Error(`Must provide text for translation`));
     } else {
-      const postBody = getPostBody(text, targetLanguage, sourceLanguage);
-      const options = getRequestOptions(postBody);
-
-      deeplApiHelper(options, postBody)
-        .then(response => {
-          try {
-            resolve(transformResponse(response));
-          } catch (exception) {
-            reject(
-              new Error(
-                `Unexpected error when parsing response body: ${JSON.stringify(
-                  response
-                )}`
-              )
-            );
-          }
-        })
-        .catch(reject);
+      resolve(true);
     }
   });
 }
 
-function getPostBody(text, targetLanguage, sourceLanguage) {
-  return {
-    jsonrpc: '2.0',
-    method: 'LMT_handle_jobs',
-    params: {
-      jobs: [
-        {
-          kind: 'default',
-          raw_en_sentence: text,
-        },
-      ],
-      lang: {
-        user_preferred_langs: ['EN'],
-        source_lang_user_selected: sourceLanguage,
+function translate(text, targetLanguage, sourceLanguage = 'auto') {
+  return validateInputs(text, targetLanguage, sourceLanguage)
+    .then(valid =>
+      deeplApiHelper.splitSentences(text.split(EOL), sourceLanguage)
+    )
+    .then(splitResponse => transformSplitSentencesResponse(splitResponse))
+    .then(([bucketSizes, texts, detectedInputLanguage]) =>
+      deeplApiHelper
+        .getTranslation(texts, targetLanguage, detectedInputLanguage)
+        .then(response => transformTranslationResponse(bucketSizes, response))
+    );
+}
+
+function transformTranslationResponse(bucketSizes, response) {
+  try {
+    const {
+      result: {
         target_lang: targetLanguage,
+        source_lang: resolvedSourceLanguage,
+        translations,
       },
-      priority: -1,
-    },
-    id: 1,
-  };
+    } = response;
+
+    const translatedSentences = translations.map(
+      ({ beams: [{ postprocessed_sentence: translation }] }) => translation
+    );
+
+    let translationsIndex = 0;
+    let joinedTranslations = [];
+
+    for (bucketSize of bucketSizes) {
+      joinedTranslations.push(
+        translatedSentences
+          .slice(translationsIndex, translationsIndex + bucketSize)
+          .join(' ')
+      );
+
+      translationsIndex += bucketSize;
+    }
+
+    return {
+      targetLanguage,
+      resolvedSourceLanguage,
+      translation: joinedTranslations.join(EOL),
+    };
+  } catch (error) {
+    throw new Error(
+      `Unexpected error when parsing deepl translation response: ${JSON.stringify(
+        response
+      )}`
+    );
+  }
 }
 
-function getRequestOptions(postBody) {
-  return {
-    hostname: DEEPL_HOSTNAME,
-    port: 443,
-    protocol: 'https:',
-    path: DEEPL_ENDPOINT,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Content-Length': Buffer.byteLength(JSON.stringify(postBody)),
-      'Cache-Control': 'no-cache',
-    },
-  };
-}
+function transformSplitSentencesResponse(response) {
+  try {
+    const { result: { splitted_texts: texts } } = response;
 
-function transformResponse(response) {
-  const {
-    result: {
-      target_lang: targetLanguage,
-      source_lang: resolvedSourceLanguage,
-      translations: [{ beams: [{ postprocessed_sentence: translation }] }],
-    },
-  } = response;
-
-  return {
-    targetLanguage,
-    resolvedSourceLanguage,
-    translation,
-  };
+    return [
+      texts.map(bucket => bucket.length),
+      texts.reduce((flattened, current) => [...flattened, ...current], []),
+      response.result.lang,
+    ];
+  } catch (error) {
+    throw new Error(
+      `Unexpected error when parsing deepl split sentence response: ${JSON.stringify(
+        response
+      )}`
+    );
+  }
 }
 
 module.exports = {
