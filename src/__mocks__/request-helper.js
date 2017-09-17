@@ -1,4 +1,4 @@
-const translationMap = require('./translationMap');
+const translationMap = require('./fixtures/translation-map');
 
 module.exports = (options, postBody) => {
   return new Promise((resolve, reject) => {

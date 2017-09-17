@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "test": "prettier-check './**/*.js' && jest",
-    "coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
+    "coverage":
+      "jest --coverage && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
   },
   "jest": {
     "verbose": true
@@ -14,7 +15,7 @@
   "repository": "https://github.com/vsetka/deepl-translator.git",
   "homepage": "https://github.com/vsetka/deepl-translator#readme",
   "author": "Vladimir Setka <vsetka@gmail.com>",
-  "license": "Apache License 2.0",
+  "license": "Apache-2.0",
   "keywords": ["deepl", "translator", "translate", "deep", "learning"],
   "bugs": {
     "url": "https://github.com/vsetka/deepl-translator/issues"

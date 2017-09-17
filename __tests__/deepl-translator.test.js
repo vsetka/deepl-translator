@@ -1,6 +1,6 @@
-jest.mock('../request-helper');
+jest.mock('../src/request-helper');
 
-const { translate, detectLanguage } = require('../index');
+const { translate, detectLanguage } = require('../src/deepl-translator');
 
 test('Detects english input language correctly', () => {
   return expect(
