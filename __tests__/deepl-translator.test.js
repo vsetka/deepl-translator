@@ -43,12 +43,25 @@ test('Rejects when input text is not provided', () => {
   );
 });
 
-test('Rejects when response in incorrect format', () => {
+test('Rejects when translation response in incorrect format', () => {
   return expect(
-    translate('This mock results in an incorrect reponse format', 'DE')
+    translate(
+      'This mock results in an incorrect translation reponse format',
+      'DE'
+    )
   ).rejects.toEqual(
     new Error(
-      'Unexpected error when parsing response body: {"result":{"no_translations_here":[]}}'
+      'Unexpected error when parsing deepl translation response: {"result":{"no_translations_here":[]}}'
+    )
+  );
+});
+
+test('Rejects when split response in incorrect format', () => {
+  return expect(
+    translate('This mock results in an incorrect split reponse format', 'DE')
+  ).rejects.toEqual(
+    new Error(
+      'Unexpected error when parsing deepl split sentence response: {"result":{"no_splits_here":[]}}'
     )
   );
 });

@@ -14,10 +14,11 @@ module.exports = {
       ],
     },
   },
+
   'This is a representative chunk of text in english.': {
     result: {
       source_lang: 'EN',
-      target_lang: 'DE',
+      target_lang: 'EN',
       translations: [
         {
           beams: [
@@ -30,9 +31,30 @@ module.exports = {
       ],
     },
   },
-  'This mock results in an incorrect reponse format': {
+
+  'This mock results in an incorrect translation reponse format': {
     result: {
       no_translations_here: [],
+    },
+  },
+
+  'Die Übersetzungsqualität von deepl ist erstaunlich!': {
+    result: {
+      source_lang: 'DE',
+      target_lang: 'EN',
+      translations: [
+        {
+          beams: [
+            {
+              num_symbols: 11,
+              postprocessed_sentence:
+                'The translation quality of deepl is amazing!',
+              score: -5001.03,
+              totalLogProb: -3.41658,
+            },
+          ],
+        },
+      ],
     },
   },
 };
