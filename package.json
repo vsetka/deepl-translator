@@ -6,7 +6,14 @@
   "main": "index.js",
   "scripts": {
     "test": "prettier-check './**/*.js' && jest",
-    "coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
+    "coverage":
+      "jest --coverage && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
+    "release:major":
+      "generate-changelog -M && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && yarn version major && git push origin && git push origin --tags",
+    "release:minor":
+      "generate-changelog -m && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && yarn version minor && git push origin && git push origin --tags",
+    "release:patch":
+      "generate-changelog -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && yarn version patch && git push origin && git push origin --tags"
   },
   "jest": {
     "verbose": true
@@ -14,7 +21,7 @@
   "repository": "https://github.com/vsetka/deepl-translator.git",
   "homepage": "https://github.com/vsetka/deepl-translator#readme",
   "author": "Vladimir Setka <vsetka@gmail.com>",
-  "license": "Apache License 2.0",
+  "license": "Apache-2.0",
   "keywords": ["deepl", "translator", "translate", "deep", "learning"],
   "bugs": {
     "url": "https://github.com/vsetka/deepl-translator/issues"
@@ -25,6 +32,7 @@
   },
   "devDependencies": {
     "coveralls": "^2.13.1",
+    "generate-changelog": "^1.5.0",
     "jest": "^21.0.2",
     "prettier": "^1.6.1",
     "prettier-check": "^1.0.0"

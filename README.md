@@ -3,8 +3,9 @@
 [![Coverage Status](https://coveralls.io/repos/github/vsetka/deepl-translator/badge.svg?branch=master)](https://coveralls.io/github/vsetka/deepl-translator?branch=master)
 [![Build Status](https://travis-ci.org/vsetka/deepl-translator.svg?branch=master)](https://travis-ci.org/vsetka/deepl-translator)
 [![Known Vulnerabilities](https://snyk.io/test/github/vsetka/deepl-translator/badge.svg)](https://snyk.io/test/github/vsetka/deepl-translator)
+[![npm version](https://badge.fury.io/js/deepl-translator.svg)](https://badge.fury.io/js/deepl-translator)
 
-This module provides promised methods for detecting language and translating text using DeepL Translator (https://www.deepl.com/translator) undocumented API.
+This unofficial node module provides promised methods for detecting language and translating text using DeepL Translator (https://www.deepl.com/translator) undocumented API.
 
 DeepL has done a great job with their deep learning translation model which outperforms the competition by a wide margin. An excerpt from their page on that topic:
 
@@ -42,13 +43,27 @@ translate('Die Übersetzungsqualität von deepl ist erstaunlich!', 'EN', 'DE')
   .catch(console.error);
 
 // Leave out the source language or specify 'auto' to autodetect the input
-translate('Die Übersetzungsqualität von deepl ist erstaunlich!', 'EN')
-  .then(res => console.log(`Translation (autodetect): ${res.translation}`))
+translate('This is a representative chunk of text in english.', 'DE')
+  .then(res => console.log(`Translation: ${res.translation}`))
   .catch(console.error);
 
 // Detect the text language without giving back the translation
 detectLanguage('Deepl también puede detectar un idioma. ¿Qué idioma es este?')
   .then(res => console.log(`Detected language: ${res.languageName}`))
+  .catch(console.error);
+
+// Multi-line translations work as well, even with different source languages mixed in
+translate(
+  `Das ist der erste Satz... Das der zweite.
+
+  C'est la troisième phrase.
+
+
+  Y ese es el cuarto.
+  I piąta.`,
+  'EN'
+)
+  .then(res => console.log(`Translation: ${res.translation}, Resolved languages: ${res.resolvedSourceLanguage}`))
   .catch(console.error);
 ```
 
@@ -75,7 +90,7 @@ This method translated the input text into a specified target language. Source l
 ### detectLanguage(text) -&gt; `object`
 This method detects the language of the input text.
 
-**text** (`string`) *Input text to detect the language of*
+**text** (`string`) *Input text to detect the language on*
 
 **Returns**
 ```javascript

@@ -1,6 +1,6 @@
-jest.mock('../request-helper');
+jest.mock('../src/request-helper');
 
-const { translate, detectLanguage } = require('../index');
+const { translate, detectLanguage } = require('../src/deepl-translator');
 
 test('Detects english input language correctly', () => {
   return expect(
@@ -16,6 +16,31 @@ test('Translate input correctly without specifying its language', () => {
     targetLanguage: 'DE',
     resolvedSourceLanguage: 'EN',
     translation: 'Herzlichen Glückwunsch zum Geburtstag!',
+  });
+});
+
+test('Translate multi-line multi-language text while keeping paragraph structure', () => {
+  return expect(
+    translate(
+      `Das ist der erste Satz... Das der zweite.
+  
+      C'est la troisième phrase.
+    
+    
+      Y ese es el cuarto.
+      I piąta.`,
+      'EN'
+    )
+  ).resolves.toEqual({
+    resolvedSourceLanguage: 'DE,FR,ES,PL',
+    targetLanguage: 'EN',
+    translation: `That's the first sentence... That's the second one.
+
+That's the third sentence.
+
+
+And that's the fourth.
+Fifth.`,
   });
 });
 
@@ -43,12 +68,25 @@ test('Rejects when input text is not provided', () => {
   );
 });
 
-test('Rejects when response in incorrect format', () => {
+test('Rejects when translation response in incorrect format', () => {
   return expect(
-    translate('This mock results in an incorrect reponse format', 'DE')
+    translate(
+      'This mock results in an incorrect translation reponse format',
+      'DE'
+    )
   ).rejects.toEqual(
     new Error(
-      'Unexpected error when parsing response body: {"result":{"no_translations_here":[]}}'
+      'Unexpected error when parsing deepl translation response: {"result":{"no_translations_here":[]}}'
+    )
+  );
+});
+
+test('Rejects when split response in incorrect format', () => {
+  return expect(
+    translate('This mock results in an incorrect split reponse format', 'DE')
+  ).rejects.toEqual(
+    new Error(
+      'Unexpected error when parsing deepl split sentence response: {"invalid_response":{}}'
     )
   );
 });
