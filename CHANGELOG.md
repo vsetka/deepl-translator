@@ -1,3 +1,19 @@
+### 1.1.0 (2017-10-01)
+
+##### Chores
+
+* add changelog ([7a37b153](https://github.com/vsetka/deepl-translator/commit/7a37b153822d419339bfede3dad5ba41ddb43cdc))
+* update tests, mocks, examples and docs ([3d697a42](https://github.com/vsetka/deepl-translator/commit/3d697a42c4869f6029eacf9a6f233e093a47897f))
+
+##### New Features
+
+* respect paragraph formatting in multi-line translations ([aa546064](https://github.com/vsetka/deepl-translator/commit/aa5460645d7b25f32e77b2607cd370eeb80a246f))
+* add multi-line text support ([3a7333bd](https://github.com/vsetka/deepl-translator/commit/3a7333bdda6512d1c16ee63cc6b486832e116b86))
+
+##### Refactors
+
+* reorganize structure ([7bc9a427](https://github.com/vsetka/deepl-translator/commit/7bc9a42798b355df891e686a7c3640ee8576a8a8))
+
 ### 1.0.1 (2017-09-10)
 
 ##### Chores
