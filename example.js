@@ -15,15 +15,15 @@ detectLanguage('Deepl también puede detectar un idioma. ¿Qué idioma es este?'
   .then(res => console.log(`Detected language: ${res.languageName}`))
   .catch(console.error);
 
-// Multi-line translations work as well
+// Multi-line translations with different languages in each paragraph work as well
 translate(
-  `Das ist der erste Satz. Das der zweite.
+  `Das ist der erste Satz... Das der zweite.
 
-  Das der dritte.
+  C'est la troisième phrase.
 
 
-  Und das der vierte.
-  Und fünfte.`,
+  Y ese es el cuarto.
+  I piąta.`,
   'EN'
 )
   .then(res => console.log(`Translation: ${res.translation}`))

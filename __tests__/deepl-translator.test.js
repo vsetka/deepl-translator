@@ -19,6 +19,31 @@ test('Translate input correctly without specifying its language', () => {
   });
 });
 
+test('Translate multi-line multi-language text while keeping paragraph structure', () => {
+  return expect(
+    translate(
+      `Das ist der erste Satz... Das der zweite.
+  
+      C'est la troisième phrase.
+    
+    
+      Y ese es el cuarto.
+      I piąta.`,
+      'EN'
+    )
+  ).resolves.toEqual({
+    resolvedSourceLanguage: 'DE,FR,ES,PL',
+    targetLanguage: 'EN',
+    translation: `That's the first sentence... That's the second one.
+
+That's the third sentence.
+
+
+And that's the fourth.
+Fifth.`,
+  });
+});
+
 test('Rejects on invalid target language', () => {
   return expect(translate('Happy birthday!')).rejects.toEqual(
     new Error('Invalid target language code undefined')
@@ -61,7 +86,7 @@ test('Rejects when split response in incorrect format', () => {
     translate('This mock results in an incorrect split reponse format', 'DE')
   ).rejects.toEqual(
     new Error(
-      'Unexpected error when parsing deepl split sentence response: {"result":{"no_splits_here":[]}}'
+      'Unexpected error when parsing deepl split sentence response: {"invalid_response":{}}'
     )
   );
 });

@@ -1,12 +1,15 @@
 const languages = require('./languages');
-const deeplApiHelper = require('./deepl-api-helper');
+const { splitSentences, getTranslation } = require('./deepl-api-helper');
 const { EOL } = require('os');
 
 function detectLanguage(text) {
   return translate(text, 'EN').then(({ resolvedSourceLanguage }) => {
     return {
       languageCode: resolvedSourceLanguage,
-      languageName: languages[resolvedSourceLanguage],
+      languageName: resolvedSourceLanguage
+        .split(',')
+        .map(code => languages[code])
+        .join(','),
     };
   });
 }
@@ -29,18 +32,41 @@ function validateInputs(text, targetLanguage, sourceLanguage) {
 
 function translate(text, targetLanguage, sourceLanguage = 'auto') {
   return validateInputs(text, targetLanguage, sourceLanguage)
-    .then(valid =>
-      deeplApiHelper.splitSentences(text.split(EOL), sourceLanguage)
-    )
-    .then(splitResponse => transformSplitSentencesResponse(splitResponse))
-    .then(([bucketSizes, texts, detectedInputLanguage]) =>
-      deeplApiHelper
-        .getTranslation(texts, targetLanguage, detectedInputLanguage)
-        .then(response => transformTranslationResponse(bucketSizes, response))
-    );
+    .then(valid => splitSentences(text.split(EOL), sourceLanguage))
+    .then(transformSplitSentencesResponse)
+    .then(([paragraphs, resolvedSourceLanguage]) => {
+      return Promise.all(
+        paragraphs.map(
+          paragraph =>
+            paragraph.length === 0
+              ? []
+              : getTranslation(
+                  paragraph,
+                  targetLanguage,
+                  resolvedSourceLanguage || 'auto'
+                ).then(transformTranslationResponse)
+        )
+      ).then(translatedParagraphs => ({
+        targetLanguage,
+        resolvedSourceLanguage: translatedParagraphs
+          .map(paragraph => paragraph[1])
+          .reduce(
+            (unique, current) => [
+              ...unique,
+              unique.indexOf(current) < 0 && current,
+            ],
+            []
+          )
+          .filter(lang => lang)
+          .join(','),
+        translation: translatedParagraphs
+          .map(([paragraph]) => paragraph || '')
+          .join(EOL),
+      }));
+    });
 }
 
-function transformTranslationResponse(bucketSizes, response) {
+function transformTranslationResponse(response) {
   try {
     const {
       result: {
@@ -54,24 +80,7 @@ function transformTranslationResponse(bucketSizes, response) {
       ({ beams: [{ postprocessed_sentence: translation }] }) => translation
     );
 
-    let translationsIndex = 0;
-    let joinedTranslations = [];
-
-    for (bucketSize of bucketSizes) {
-      joinedTranslations.push(
-        translatedSentences
-          .slice(translationsIndex, translationsIndex + bucketSize)
-          .join(' ')
-      );
-
-      translationsIndex += bucketSize;
-    }
-
-    return {
-      targetLanguage,
-      resolvedSourceLanguage,
-      translation: joinedTranslations.join(EOL),
-    };
+    return [translatedSentences.join(' '), resolvedSourceLanguage];
   } catch (error) {
     throw new Error(
       `Unexpected error when parsing deepl translation response: ${JSON.stringify(
@@ -83,13 +92,11 @@ function transformTranslationResponse(bucketSizes, response) {
 
 function transformSplitSentencesResponse(response) {
   try {
-    const { result: { splitted_texts: texts } } = response;
+    const {
+      result: { splitted_texts: texts, lang_is_confident, lang },
+    } = response;
 
-    return [
-      texts.map(bucket => bucket.length),
-      texts.reduce((flattened, current) => [...flattened, ...current], []),
-      response.result.lang,
-    ];
+    return [texts, lang_is_confident && lang];
   } catch (error) {
     throw new Error(
       `Unexpected error when parsing deepl split sentence response: ${JSON.stringify(

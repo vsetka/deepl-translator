@@ -46,11 +46,79 @@ module.exports = {
         {
           beams: [
             {
-              num_symbols: 11,
               postprocessed_sentence:
                 'The translation quality of deepl is amazing!',
-              score: -5001.03,
-              totalLogProb: -3.41658,
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  'Das ist der erste Satz...': {
+    result: {
+      source_lang: 'DE',
+      target_lang: 'EN',
+      translations: [
+        {
+          beams: [
+            {
+              postprocessed_sentence: "That's the first sentence...",
+            },
+          ],
+        },
+        {
+          beams: [
+            {
+              postprocessed_sentence: "That's the second one.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  "  C'est la troisième phrase.": {
+    result: {
+      source_lang: 'FR',
+      target_lang: 'EN',
+      translations: [
+        {
+          beams: [
+            {
+              postprocessed_sentence: "That's the third sentence.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  '  Y ese es el cuarto.': {
+    result: {
+      source_lang: 'ES',
+      target_lang: 'EN',
+      translations: [
+        {
+          beams: [
+            {
+              postprocessed_sentence: "And that's the fourth.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  '  I piąta.': {
+    result: {
+      source_lang: 'PL',
+      target_lang: 'EN',
+      translations: [
+        {
+          beams: [
+            {
+              postprocessed_sentence: 'Fifth.',
             },
           ],
         },

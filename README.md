@@ -3,6 +3,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/vsetka/deepl-translator/badge.svg?branch=master)](https://coveralls.io/github/vsetka/deepl-translator?branch=master)
 [![Build Status](https://travis-ci.org/vsetka/deepl-translator.svg?branch=master)](https://travis-ci.org/vsetka/deepl-translator)
 [![Known Vulnerabilities](https://snyk.io/test/github/vsetka/deepl-translator/badge.svg)](https://snyk.io/test/github/vsetka/deepl-translator)
+[![npm version](https://badge.fury.io/js/deepl-translator.svg)](https://badge.fury.io/js/deepl-translator)
 
 This unofficial node module provides promised methods for detecting language and translating text using DeepL Translator (https://www.deepl.com/translator) undocumented API.
 
@@ -51,18 +52,18 @@ detectLanguage('Deepl también puede detectar un idioma. ¿Qué idioma es este?'
   .then(res => console.log(`Detected language: ${res.languageName}`))
   .catch(console.error);
 
-// Multi-line translations work as well
+// Multi-line translations work as well, even with different source languages mixed in
 translate(
-  `Das ist der erste Satz. Das der zweite.
+  `Das ist der erste Satz... Das der zweite.
 
-  Das der dritte.
+  C'est la troisième phrase.
 
 
-  Und das der vierte.
-  Und fünfte.`,
+  Y ese es el cuarto.
+  I piąta.`,
   'EN'
 )
-  .then(res => console.log(`Translation: ${res.translation}`))
+  .then(res => console.log(`Translation: ${res.translation}, Resolved languages: ${res.resolvedSourceLanguage}`))
   .catch(console.error);
 ```
 
@@ -89,7 +90,7 @@ This method translated the input text into a specified target language. Source l
 ### detectLanguage(text) -&gt; `object`
 This method detects the language of the input text.
 
-**text** (`string`) *Input text to detect the language of*
+**text** (`string`) *Input text to detect the language on*
 
 **Returns**
 ```javascript

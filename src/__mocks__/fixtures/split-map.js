@@ -20,9 +20,7 @@ module.exports = {
   },
 
   'This mock results in an incorrect split reponse format': {
-    result: {
-      no_splits_here: [],
-    },
+    invalid_response: {},
   },
 
   'This mock results in an incorrect translation reponse format': {
@@ -33,6 +31,24 @@ module.exports = {
       lang_is_confident: 1,
       splitted_texts: [
         ['This mock results in an incorrect translation reponse format'],
+      ],
+    },
+  },
+
+  'Das ist der erste Satz... Das der zweite.': {
+    id: 1,
+    jsonrpc: '2.0',
+    result: {
+      lang: 'DE',
+      lang_is_confident: 0,
+      splitted_texts: [
+        ['Das ist der erste Satz...', 'Das der zweite.'],
+        [],
+        ["  C'est la troisième phrase."],
+        [],
+        [],
+        ['  Y ese es el cuarto.'],
+        ['  I piąta.'],
       ],
     },
   },
