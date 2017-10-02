@@ -3,7 +3,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/vsetka/deepl-translator/badge.svg?branch=master)](https://coveralls.io/github/vsetka/deepl-translator?branch=master)
 [![Build Status](https://travis-ci.org/vsetka/deepl-translator.svg?branch=master)](https://travis-ci.org/vsetka/deepl-translator)
 [![Known Vulnerabilities](https://snyk.io/test/github/vsetka/deepl-translator/badge.svg)](https://snyk.io/test/github/vsetka/deepl-translator)
-[![npm version](https://badge.fury.io/js/deepl-translator.svg)](https://badge.fury.io/js/deepl-translator)
+[![npm version](https://img.shields.io/npm/v/deepl-translator.svg)](https://www.npmjs.com/package/deepl-translator)
+[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](#badge)
 
 This unofficial node module provides promised methods for detecting language and translating text using DeepL Translator (https://www.deepl.com/translator) undocumented API.
 
