@@ -1,6 +1,10 @@
 jest.mock('../src/request-helper');
 
-const { translate, detectLanguage } = require('../src/deepl-translator');
+const {
+  translate,
+  detectLanguage,
+  wordAlternatives,
+} = require('../src/deepl-translator');
 
 test('Detects english input language correctly', () => {
   return expect(
@@ -41,6 +45,21 @@ That's the third sentence.
 
 And that's the fourth.
 Fifth.`,
+  });
+});
+
+test('Create translation with a fixed beginning', () => {
+  return expect(
+    translate(
+      'Die Übersetzungsqualität von deepl ist erstaunlich!',
+      'EN',
+      'DE',
+      'The translation performance'
+    )
+  ).resolves.toEqual({
+    resolvedSourceLanguage: 'DE',
+    targetLanguage: 'EN',
+    translation: 'The translation performance of deepl is amazing!',
   });
 });
 
@@ -89,4 +108,30 @@ test('Rejects when split response in incorrect format', () => {
       'Unexpected error when parsing deepl split sentence response: {"invalid_response":{}}'
     )
   );
+});
+
+test('Get alternative beginnings of a sentence', () => {
+  const text = 'Die Übersetzungsqualität von deepl ist erstaunlich!';
+  // Translates to: 'The translation quality of deepl is amazing!'
+  return expect(
+    wordAlternatives(text, 'EN', 'auto', 'The translation')
+  ).resolves.toEqual({
+    targetLanguage: 'EN',
+    resolvedSourceLanguage: 'DE',
+    alternatives: [
+      'The translation quality',
+      'The translation of deepl',
+      'The translation performance',
+    ],
+  });
+});
+
+test('Rejects when requesting alternative beginning without beginning', () => {
+  return expect(
+    wordAlternatives(
+      'Die Übersetzungsqualität von deepl ist erstaunlich!',
+      'EN',
+      'DE'
+    )
+  ).rejects.toEqual(new Error('Beginning cannot be undefined'));
 });
