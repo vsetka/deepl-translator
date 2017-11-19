@@ -25,7 +25,19 @@
   "homepage": "https://github.com/vsetka/deepl-translator#readme",
   "author": "Vladimir Setka <vsetka@gmail.com>",
   "license": "Apache-2.0",
-  "keywords": ["deepl", "translator", "translate", "deep", "learning"],
+  "keywords": [
+    "deepl",
+    "translator",
+    "translate",
+    "deep",
+    "learning",
+    "node",
+    "deepl-translator",
+    "promised",
+    "machine-translation",
+    "text",
+    "translation"
+  ],
   "bugs": {
     "url": "https://github.com/vsetka/deepl-translator/issues"
   },
