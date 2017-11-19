@@ -1,3 +1,27 @@
+### 1.2.0 (2017-11-19)
+
+##### Chores
+
+* add more keywords for better discoverability ([e6d4169d](https://github.com/vsetka/deepl-translator/commit/e6d4169d28a387ab6534fdf15a271f6b7f60e576))
+* update tests, mocks, examples and docs ([986c442a](https://github.com/vsetka/deepl-translator/commit/986c442af7b919a71fd1b719646c934ca214ea3f))
+* update badges ([735f7c2d](https://github.com/vsetka/deepl-translator/commit/735f7c2d8ebda709545ee330d8818e6129b2f886))
+* create issue and pull request templates ([0080dd23](https://github.com/vsetka/deepl-translator/commit/0080dd23fde3229433df62dc24eda9ab85b96db2))
+
+##### New Features
+
+* shim http request implementation to support front-end use ([6bd22620](https://github.com/vsetka/deepl-translator/commit/6bd22620a4785cca2806c329614614a4f26248b1))
+* add a method that gets alternative translations for shorter texts ([b482ed55](https://github.com/vsetka/deepl-translator/commit/b482ed557816941e55935581f01de42642a848fd))
+* add support to use deepl's word-alternative API ([40148fa9](https://github.com/vsetka/deepl-translator/commit/40148fa9f42ad5e640e018d5ec8c702f63ae3408))
+
+##### Bug Fixes
+
+* process response fully before parsing it to JSON ([ea42c3d9](https://github.com/vsetka/deepl-translator/commit/ea42c3d9922f43dfbb5b886a3bb991be7955aac3))
+
+##### Refactors
+
+* use the lightweight translation method in wordAlternatives ([5c8cc760](https://github.com/vsetka/deepl-translator/commit/5c8cc76015ad0b0cb6228c878c3b87af001f53c6))
+* implement more granular parameter validation ([fba8517e](https://github.com/vsetka/deepl-translator/commit/fba8517e1a259c39a228b50a9681ee1ad8836fcd))
+
 ### 1.1.0 (2017-10-01)
 
 ##### Chores
