@@ -36,11 +36,23 @@ yarn add deepl-translator
 ## Usage
 
 ```javascript
-const { translate, detectLanguage } = require('deepl-translator');
+const { translate, detectLanguage, wordAlternatives, translateWithAlternatives } = require('deepl-translator');
 
 // Translate text with explicit source and target languages
 translate('Die Übersetzungsqualität von deepl ist erstaunlich!', 'EN', 'DE')
   .then(res => console.log(`Translation: ${res.translation}`))
+  .catch(console.error);
+
+// Translate short text with this method to get a few translation alternatives
+translateWithAlternatives(
+  'Die Übersetzungsqualität von deepl ist erstaunlich!',
+  'EN'
+)
+  .then(res =>
+    console.log(
+      `Translation alternatives: ${res.translationAlternatives.join(', ')}`
+    )
+  )
   .catch(console.error);
 
 // Leave out the source language or specify 'auto' to autodetect the input
@@ -67,20 +79,23 @@ translate(
   .then(res => console.log(`Translation: ${res.translation}, Resolved languages: ${res.resolvedSourceLanguage}`))
   .catch(console.error);
 
-  // Get alternatives for words in translated sentences
+  // This method allows for tweaking the translation. By providing a beginning, we define a word or a phrase
+  // for which we want alternative translations within the context of a larger body of text (a sentence).
+  // One of the returned alternatives can then be selected and passed into translateWithAlternatives
+  // as an overriding word/phrase for the beginning of the whole translation.
   {
     const text = 'Die Übersetzungsqualität von deepl ist erstaunlich!';
     // Translates to: 'The translation quality of deepl is amazing!'
     wordAlternatives(text, 'EN', 'DE', 'The translation')
       .then(res => {
         console.log(`3 Alternative beginnings:`);
-        res.alternatives.slice(0, 3).forEach(el => console.log(el));
-        // Choose third alternetive
+        res.alternatives.slice(0, 3).forEach(alt => console.log(alt));
+        // Choose the third alternetive
         return res.alternatives[2];
       })
       .then(beginning => {
         // Request translation with selected alternative beginning
-        return translate(text, 'EN', 'DE', beginning);
+        return translateWithAlternatives(text, 'EN', 'DE', beginning);
       })
       .then(res => console.log(`Alternative: ${res.translation}`));
   }
@@ -88,8 +103,9 @@ translate(
 
 ## API
 
-### translate(text, targetLanguage, sourceLanguage, beginning) -&gt; `object`
-This method translates the input text into a specified target language. Source language can be autodetected. Optionally, a sentence beginning can be given (should only be used in conjunction with `wordAlternatives`).
+### translate(text, targetLanguage, sourceLanguage) -&gt; `object`
+This method translates the input text into a specified target language. Source language can be autodetected. Multi-line text translation is possible with
+line breaks preserved.
 
 **text** (`string`) *Input text to be translated*
 
@@ -97,14 +113,33 @@ This method translates the input text into a specified target language. Source l
 
 **sourceLanguage** (`string`) *Language code of the input text language. Can be left out or set to `auto` for automatic language detection.*
 
-**beginning** (`string`) *Desired beginning of the translation (should only be used in conjunction with `wordAlternatives`)*
+**Returns**
+```javascript
+{
+  targetLanguage: 'XY', // Language code(s) of the language that was translate to
+  resolvedSourceLanguage: 'YZ', // Language code(s) of the input language (resolved automatically for autodetect)
+  translation: 'Translated text' // Translated text
+}
+```
+
+### translateWithAlternatives(text, targetLanguage, sourceLanguage, beginning) -&gt; `object`
+This method translates the input text into a specified target language. Source language can be autodetected. Optionally, a sentence beginning override can be given (should be used in conjunction with `wordAlternatives` which gives contextual phrase/word translations).
+
+**text** (`string`) *Input text to be translated*
+
+**targetLanguage** (`string`) *Language code of the language to translate to*
+
+**sourceLanguage** (`string`) *Language code of the input text language. Can be left out or set to `auto` for automatic language detection.*
+
+**beginning** (`string`) *Override of the translation beginning*
 
 **Returns**
 ```javascript
 {
   targetLanguage: 'XY', // Language code of the language that was translate to
   resolvedSourceLanguage: 'YZ', // Language code of the input language (resolved automatically for autodetect)
-  translation: 'Translated text' // Translated text
+  translation: 'Translated text', // Translated text
+  translationAlternatives: ['First translated alternative', 'Second translated alternative']
 }
 ```
 
@@ -122,7 +157,7 @@ This method detects the language of the input text.
 ```
 
 ### wordAlternatives(text, targetLanguage, sourceLanguage, beginning) -&gt; `object`
-This method suggests alternative words for a translation of the input text. None of the languages can be autodetected. Normally, this method will be used after translating the input text using `translate`, because `beginning` must be the beginning of a translation.
+This method suggests alternative wordings for a subset of the beginning input text. This means we get alternative translations for the given word or a phrase within a context of the larger body of text (the input `text`). Languages cannot be autodetected.
 
 **text** (`string`) *Input text to be translated*
 
@@ -130,14 +165,14 @@ This method suggests alternative words for a translation of the input text. None
 
 **sourceLanguage** (`string`) *Language code of the input text language*
 
-**beginning** (`string`) *Beginning of the translation of `text`. The method searches an alternative for the following word.*
+**beginning** (`string`) *Subset of the translation of `text` for which the contextual alternatives will be provided*
 
 **Returns**
 ```javascript
 {
   targetLanguage: 'XY', // Language code of the language that was translate to
   resolvedSourceLanguage: 'YZ', // Language code of the input language
-  alternatives: ['an alternative', 'an other alternative'], // Array of alternative sentence beginnings
+  alternatives: ['An alternative', 'Yet another alternative'], // Array of alternative sentence beginnings
 }
 ```
 

@@ -68,7 +68,7 @@ module.exports = (options, postBody) => {
     return handleSplitSentences(options, postBody);
   }
   if (postBody.params.jobs[0].kind === 'default') {
-    return postBody.params.jobs[0].de_sentence_beginning === ''
+    return !postBody.params.jobs[0].de_sentence_beginning
       ? handleTranslateJobs(options, postBody)
       : handleTranslateBeginningJobs(options, postBody);
   }

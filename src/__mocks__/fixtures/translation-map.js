@@ -49,6 +49,17 @@ module.exports = {
               postprocessed_sentence:
                 'The translation quality of deepl is amazing!',
             },
+            {
+              postprocessed_sentence: "deepl's translation quality is amazing!",
+            },
+            {
+              postprocessed_sentence:
+                'The translation quality of deepl is astonishing!',
+            },
+            {
+              postprocessed_sentence:
+                'The translation quality of deepl is astounding!',
+            },
           ],
         },
       ],

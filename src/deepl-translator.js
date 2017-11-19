@@ -86,6 +86,26 @@ function translate(
     });
 }
 
+function translateWithAlternatives(
+  text,
+  targetLanguage,
+  sourceLanguage = 'auto',
+  beginning
+) {
+  return validateInputs(text, targetLanguage, sourceLanguage)
+    .then(valid =>
+      getTranslation([text], targetLanguage, sourceLanguage, beginning)
+    )
+    .then(({ result: { source_lang, translations: [{ beams }] } }) => ({
+      targetLanguage,
+      resolvedSourceLanguage: source_lang,
+      translation: beams[0].postprocessed_sentence,
+      translationAlternatives: beams.map(
+        ({ postprocessed_sentence }) => postprocessed_sentence
+      ),
+    }));
+}
+
 function wordAlternatives(text, targetLanguage, sourceLanguage, beginning) {
   return validateInputs(text, targetLanguage, sourceLanguage)
     .then(valid => validateBeginning(beginning))
@@ -145,6 +165,7 @@ function transformSplitSentencesResponse(response) {
 
 module.exports = {
   translate,
+  translateWithAlternatives,
   detectLanguage,
   wordAlternatives,
 };

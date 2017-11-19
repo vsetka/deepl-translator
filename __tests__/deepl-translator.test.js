@@ -4,6 +4,7 @@ const {
   translate,
   detectLanguage,
   wordAlternatives,
+  translateWithAlternatives,
 } = require('../src/deepl-translator');
 
 test('Detects english input language correctly', () => {
@@ -134,4 +135,23 @@ test('Rejects when requesting alternative beginning without beginning', () => {
       'DE'
     )
   ).rejects.toEqual(new Error('Beginning cannot be undefined'));
+});
+
+test('Translate short text to a few translation alternatives', () => {
+  return expect(
+    translateWithAlternatives(
+      'Die Übersetzungsqualität von deepl ist erstaunlich!',
+      'EN'
+    )
+  ).resolves.toEqual({
+    targetLanguage: 'EN',
+    resolvedSourceLanguage: 'DE',
+    translation: 'The translation quality of deepl is amazing!',
+    translationAlternatives: [
+      'The translation quality of deepl is amazing!',
+      "deepl's translation quality is amazing!",
+      'The translation quality of deepl is astonishing!',
+      'The translation quality of deepl is astounding!',
+    ],
+  });
 });
