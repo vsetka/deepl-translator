@@ -52,4 +52,14 @@ module.exports = {
       ],
     },
   },
+
+  'Die Übersetzungsqualität von deepl ist erstaunlich!': {
+    id: 1,
+    jsonrpc: '2.0',
+    result: {
+      lang: 'DE',
+      lang_is_confident: 1,
+      splitted_texts: [['Die Übersetzungsqualität von deepl ist erstaunlich!']],
+    },
+  },
 };

@@ -1,5 +1,9 @@
 const languages = require('./languages');
-const { splitSentences, getTranslation } = require('./deepl-api-helper');
+const {
+  splitSentences,
+  getTranslation,
+  getAlternatives,
+} = require('./deepl-api-helper');
 const { EOL } = require('os');
 
 function detectLanguage(text) {
@@ -30,7 +34,22 @@ function validateInputs(text, targetLanguage, sourceLanguage) {
   });
 }
 
-function translate(text, targetLanguage, sourceLanguage = 'auto') {
+function validateBeginning(beginning) {
+  return new Promise((resolve, reject) => {
+    if (beginning == undefined) {
+      reject(new Error(`Beginning cannot be undefined`));
+    } else {
+      resolve(true);
+    }
+  });
+}
+
+function translate(
+  text,
+  targetLanguage,
+  sourceLanguage = 'auto',
+  beginning = ''
+) {
   return validateInputs(text, targetLanguage, sourceLanguage)
     .then(valid => splitSentences(text.split(EOL), sourceLanguage))
     .then(transformSplitSentencesResponse)
@@ -43,7 +62,8 @@ function translate(text, targetLanguage, sourceLanguage = 'auto') {
               : getTranslation(
                   paragraph,
                   targetLanguage,
-                  resolvedSourceLanguage || 'auto'
+                  resolvedSourceLanguage || 'auto',
+                  beginning
                 ).then(transformTranslationResponse)
         )
       ).then(translatedParagraphs => ({
@@ -63,6 +83,23 @@ function translate(text, targetLanguage, sourceLanguage = 'auto') {
           .map(([paragraph]) => paragraph || '')
           .join(EOL),
       }));
+    });
+}
+
+function wordAlternatives(text, targetLanguage, sourceLanguage, beginning) {
+  return validateInputs(text, targetLanguage, sourceLanguage)
+    .then(valid => validateBeginning(beginning))
+    .then(valid =>
+      getAlternatives(text, targetLanguage, sourceLanguage, beginning)
+    )
+    .then(res => {
+      return {
+        targetLanguage: res.result.target_lang,
+        resolvedSourceLanguage: res.result.source_lang,
+        alternatives: res.result.translations[0].beams.map(alt => {
+          return alt.postprocessed_sentence;
+        }),
+      };
     });
 }
 
@@ -109,4 +146,5 @@ function transformSplitSentencesResponse(response) {
 module.exports = {
   translate,
   detectLanguage,
+  wordAlternatives,
 };

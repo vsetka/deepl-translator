@@ -3,7 +3,7 @@ const request = require('./request-helper');
 const DEEPL_HOSTNAME = 'www.deepl.com';
 const DEEPL_ENDPOINT = '/jsonrpc';
 
-function getHandleJobsBody(texts, targetLanguage, sourceLanguage) {
+function getHandleJobsBody(texts, targetLanguage, sourceLanguage, beginning) {
   return {
     jsonrpc: '2.0',
     method: 'LMT_handle_jobs',
@@ -12,6 +12,7 @@ function getHandleJobsBody(texts, targetLanguage, sourceLanguage) {
         return {
           kind: 'default',
           raw_en_sentence: text,
+          de_sentence_beginning: beginning,
         };
       }),
       lang: {
@@ -20,6 +21,28 @@ function getHandleJobsBody(texts, targetLanguage, sourceLanguage) {
         target_lang: targetLanguage,
       },
       priority: -1,
+    },
+    id: 1,
+  };
+}
+
+function getAlternativesBody(text, targetLanguage, sourceLanguage, beginning) {
+  return {
+    jsonrpc: '2.0',
+    method: 'LMT_handle_jobs',
+    params: {
+      jobs: [
+        {
+          de_sentence_beginning: beginning,
+          kind: 'alternatives_at_position',
+          raw_en_sentence: text,
+        },
+      ],
+      lang: {
+        source_lang_computed: sourceLanguage,
+        target_lang: targetLanguage,
+      },
+      priority: 1,
     },
     id: 1,
   };
@@ -56,14 +79,30 @@ function getRequestOptions(postBody) {
 }
 
 module.exports = {
-  getTranslation: (texts, targetLanguage, sourceLanguage) => {
-    const postBody = getHandleJobsBody(texts, targetLanguage, sourceLanguage);
+  getTranslation: (texts, targetLanguage, sourceLanguage, beginning) => {
+    const postBody = getHandleJobsBody(
+      texts,
+      targetLanguage,
+      sourceLanguage,
+      beginning
+    );
     const options = getRequestOptions(postBody);
 
     return request(options, postBody);
   },
   splitSentences: (texts, sourceLanguage) => {
     const postBody = getSplitSentencesBody(texts, sourceLanguage);
+    const options = getRequestOptions(postBody);
+
+    return request(options, postBody);
+  },
+  getAlternatives: (text, targetLanguage, sourceLanguage, beginning) => {
+    const postBody = getAlternativesBody(
+      text,
+      targetLanguage,
+      sourceLanguage,
+      beginning
+    );
     const options = getRequestOptions(postBody);
 
     return request(options, postBody);
