@@ -1,5 +1,13 @@
 const languages = require('./languages');
 const {
+  validateText,
+  validateSourceLanguage,
+  validateTargetLanguage,
+  validateSourceTargetLanguage,
+  validateBeginning,
+} = require('./validators');
+
+const {
   splitSentences,
   getTranslation,
   getAlternatives,
@@ -18,29 +26,19 @@ function detectLanguage(text) {
   });
 }
 
-function validateInputs(text, targetLanguage, sourceLanguage) {
-  return new Promise((resolve, reject) => {
-    if (sourceLanguage !== 'auto' && !languages[sourceLanguage]) {
-      reject(new Error(`Invalid source language code ${sourceLanguage}`));
-    } else if (!languages[targetLanguage]) {
-      reject(new Error(`Invalid target language code ${targetLanguage}`));
-    } else if (targetLanguage === sourceLanguage) {
-      reject(new Error(`Target and source language codes identical`));
-    } else if (typeof text !== 'string' || text.trim().length === 0) {
-      reject(new Error(`Must provide text for translation`));
-    } else {
-      resolve(true);
-    }
-  });
-}
+function validateInputs(validationArray) {
+  return Promise.all(validationArray).then(validationResults => {
+    const errors = validationResults
+      .filter(validationResult => validationResult)
+      .join('\n');
 
-function validateBeginning(beginning) {
-  return new Promise((resolve, reject) => {
-    if (beginning == undefined) {
-      reject(new Error(`Beginning cannot be undefined`));
-    } else {
-      resolve(true);
-    }
+    return errors.length
+      ? Promise.reject(
+          new Error(
+            `Input parameter validation failed with error(s): ${errors}`
+          )
+        )
+      : Promise.resolve('');
   });
 }
 
@@ -50,7 +48,12 @@ function translate(
   sourceLanguage = 'auto',
   beginning = ''
 ) {
-  return validateInputs(text, targetLanguage, sourceLanguage)
+  return validateInputs([
+    validateText(text),
+    validateSourceLanguage(sourceLanguage),
+    validateTargetLanguage(targetLanguage),
+    validateSourceTargetLanguage(sourceLanguage, targetLanguage),
+  ])
     .then(valid => splitSentences(text.split(EOL), sourceLanguage))
     .then(transformSplitSentencesResponse)
     .then(([paragraphs, resolvedSourceLanguage]) => {
@@ -92,7 +95,12 @@ function translateWithAlternatives(
   sourceLanguage = 'auto',
   beginning
 ) {
-  return validateInputs(text, targetLanguage, sourceLanguage)
+  return validateInputs([
+    validateText(text),
+    validateSourceLanguage(sourceLanguage),
+    validateTargetLanguage(targetLanguage),
+    validateSourceTargetLanguage(sourceLanguage, targetLanguage),
+  ])
     .then(valid =>
       getTranslation([text], targetLanguage, sourceLanguage, beginning)
     )
@@ -107,8 +115,13 @@ function translateWithAlternatives(
 }
 
 function wordAlternatives(text, targetLanguage, sourceLanguage, beginning) {
-  return validateInputs(text, targetLanguage, sourceLanguage)
-    .then(valid => validateBeginning(beginning))
+  return validateInputs([
+    validateText(text),
+    validateSourceLanguage(sourceLanguage),
+    validateTargetLanguage(targetLanguage),
+    validateSourceTargetLanguage(sourceLanguage, targetLanguage),
+    validateBeginning(beginning),
+  ])
     .then(valid =>
       getAlternatives(text, targetLanguage, sourceLanguage, beginning)
     )

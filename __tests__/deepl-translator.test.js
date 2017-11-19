@@ -66,25 +66,33 @@ test('Create translation with a fixed beginning', () => {
 
 test('Rejects on invalid target language', () => {
   return expect(translate('Happy birthday!')).rejects.toEqual(
-    new Error('Invalid target language code undefined')
+    new Error(
+      'Input parameter validation failed with error(s): Invalid target language code undefined'
+    )
   );
 });
 
 test('Rejects on invalid source language', () => {
   return expect(translate('Happy birthday!', 'DE', 'XX')).rejects.toEqual(
-    new Error('Invalid source language code XX')
+    new Error(
+      'Input parameter validation failed with error(s): Invalid source language code XX'
+    )
   );
 });
 
 test('Rejects when source and target languages are identical', () => {
   return expect(translate('Happy birthday!', 'DE', 'DE')).rejects.toEqual(
-    new Error('Target and source language codes identical')
+    new Error(
+      'Input parameter validation failed with error(s): Target and source language codes identical'
+    )
   );
 });
 
 test('Rejects when input text is not provided', () => {
   return expect(translate('', 'DE')).rejects.toEqual(
-    new Error('Must provide text for translation')
+    new Error(
+      'Input parameter validation failed with error(s): Must provide valid text for translation'
+    )
   );
 });
 
@@ -134,7 +142,11 @@ test('Rejects when requesting alternative beginning without beginning', () => {
       'EN',
       'DE'
     )
-  ).rejects.toEqual(new Error('Beginning cannot be undefined'));
+  ).rejects.toEqual(
+    new Error(
+      'Input parameter validation failed with error(s): Must provide valid text for beginning translation override'
+    )
+  );
 });
 
 test('Translate short text to a few translation alternatives', () => {
