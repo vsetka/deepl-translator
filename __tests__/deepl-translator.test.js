@@ -51,7 +51,7 @@ Fifth.`,
 
 test('Create translation with a fixed beginning', () => {
   return expect(
-    translate(
+    translateWithAlternatives(
       'Die Übersetzungsqualität von deepl ist erstaunlich!',
       'EN',
       'DE',
@@ -61,6 +61,9 @@ test('Create translation with a fixed beginning', () => {
     resolvedSourceLanguage: 'DE',
     targetLanguage: 'EN',
     translation: 'The translation performance of deepl is amazing!',
+    translationAlternatives: [
+      'The translation performance of deepl is amazing!',
+    ],
   });
 });
 

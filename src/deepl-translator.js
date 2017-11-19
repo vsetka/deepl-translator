@@ -42,12 +42,7 @@ function validateInputs(validationArray) {
   });
 }
 
-function translate(
-  text,
-  targetLanguage,
-  sourceLanguage = 'auto',
-  beginning = ''
-) {
+function translate(text, targetLanguage, sourceLanguage = 'auto') {
   return validateInputs([
     validateText(text),
     validateSourceLanguage(sourceLanguage),
@@ -65,8 +60,7 @@ function translate(
               : getTranslation(
                   paragraph,
                   targetLanguage,
-                  resolvedSourceLanguage || 'auto',
-                  beginning
+                  resolvedSourceLanguage || 'auto'
                 ).then(transformTranslationResponse)
         )
       ).then(translatedParagraphs => ({
