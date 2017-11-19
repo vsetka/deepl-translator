@@ -1,14 +1,22 @@
 {
   "name": "deepl-translator",
   "version": "1.1.0",
-  "description": "This module provides promised methods for translating text using DeepL Translator (https://www.deepl.com/translator) undocumented API.",
+  "description":
+    "This module provides promised methods for translating text using DeepL Translator (https://www.deepl.com/translator) undocumented API.",
   "main": "index.js",
+  "browser": {
+    "./src/request-helper.js": "./shims/client-request-helper.js"
+  },
   "scripts": {
     "test": "prettier-check './**/*.js' && jest",
-    "coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
-    "release:major": "generate-changelog -u https://github.com/vsetka/deepl-translator -M && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && yarn version --new-version major && git push origin && git push origin --tags",
-    "release:minor": "generate-changelog -u https://github.com/vsetka/deepl-translator -m && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && yarn version --new-version minor && git push origin && git push origin --tags",
-    "release:patch": "generate-changelog -u https://github.com/vsetka/deepl-translator -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && yarn version --new-version patch && git push origin && git push origin --tags"
+    "coverage":
+      "jest --coverage && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
+    "release:major":
+      "generate-changelog -u https://github.com/vsetka/deepl-translator -M && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && yarn version --new-version major && git push origin && git push origin --tags",
+    "release:minor":
+      "generate-changelog -u https://github.com/vsetka/deepl-translator -m && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && yarn version --new-version minor && git push origin && git push origin --tags",
+    "release:patch":
+      "generate-changelog -u https://github.com/vsetka/deepl-translator -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && yarn version --new-version patch && git push origin && git push origin --tags"
   },
   "jest": {
     "verbose": true
@@ -17,13 +25,7 @@
   "homepage": "https://github.com/vsetka/deepl-translator#readme",
   "author": "Vladimir Setka <vsetka@gmail.com>",
   "license": "Apache-2.0",
-  "keywords": [
-    "deepl",
-    "translator",
-    "translate",
-    "deep",
-    "learning"
-  ],
+  "keywords": ["deepl", "translator", "translate", "deep", "learning"],
   "bugs": {
     "url": "https://github.com/vsetka/deepl-translator/issues"
   },

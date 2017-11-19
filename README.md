@@ -33,6 +33,8 @@ DeepL has done a great job with their deep learning translation model which outp
 yarn add deepl-translator
 ```
 
+This package can also be used on the client since it provides an XHR shim for the HTTP request helper implementation. The shim is defined as a mapping in the `browser` property of the `package.json` so it should be picked up automatically by most of the popular bundlers.
+
 ## Usage
 
 ```javascript
