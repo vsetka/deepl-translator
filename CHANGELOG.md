@@ -1,3 +1,9 @@
+#### 1.2.1 (2018-07-27)
+
+##### Bug Fixes
+
+*  Update deepl API ([#8](https://github.com/vsetka/deepl-translator/pull/8)) ([5e7f1c3c](https://github.com/vsetka/deepl-translator/commit/5e7f1c3c08abd6e49323d40990f0738b16238983))
+
 ### 1.2.0 (2017-11-19)
 
 ##### Chores
