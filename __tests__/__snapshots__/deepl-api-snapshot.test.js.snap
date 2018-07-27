@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Gets a correct translation 1`] = `
+Object {
+  "id": Any<Number>,
+  "jsonrpc": "2.0",
+  "result": Object {
+    "date": Any<String>,
+    "source_lang": "EN",
+    "source_lang_is_confident": Any<Number>,
+    "target_lang": "DE",
+    "timestamp": Any<Number>,
+    "translations": Array [
+      Object {
+        "beams": Array [
+          Object {
+            "num_symbols": Any<Number>,
+            "postprocessed_sentence": Any<String>,
+            "score": Any<Number>,
+            "totalLogProb": Any<Number>,
+          },
+          Object {
+            "num_symbols": Any<Number>,
+            "postprocessed_sentence": Any<String>,
+            "score": Any<Number>,
+            "totalLogProb": Any<Number>,
+          },
+          Object {
+            "num_symbols": Any<Number>,
+            "postprocessed_sentence": Any<String>,
+            "score": Any<Number>,
+            "totalLogProb": Any<Number>,
+          },
+          Object {
+            "num_symbols": Any<Number>,
+            "postprocessed_sentence": Any<String>,
+            "score": Any<Number>,
+            "totalLogProb": Any<Number>,
+          },
+          Object {
+            "num_symbols": Any<Number>,
+            "postprocessed_sentence": Any<String>,
+            "score": Any<Number>,
+            "totalLogProb": Any<Number>,
+          },
+        ],
+        "timeAfterPreprocessing": Any<Number>,
+        "timeReceivedFromEndpoint": Any<Number>,
+        "timeSentToEndpoint": Any<Number>,
+        "total_time_endpoint": Any<Number>,
+      },
+    ],
+  },
+}
+`;
+
+exports[`Splits sentences correctly 1`] = `
+Object {
+  "id": 1,
+  "jsonrpc": "2.0",
+  "result": Object {
+    "lang": "EN",
+    "lang_is_confident": 1,
+    "splitted_texts": Array [
+      Array [
+        "Split me, please.",
+        "Yours truly, the sentence.",
+      ],
+    ],
+  },
+}
+`;
