@@ -1,6 +1,6 @@
 const request = require('./request-helper');
 
-const DEEPL_HOSTNAME = 'www.deepl.com';
+const DEEPL_HOSTNAME = 'www2.deepl.com';
 const DEEPL_ENDPOINT = '/jsonrpc';
 
 function getHandleJobsBody(texts, targetLanguage, sourceLanguage, beginning) {
