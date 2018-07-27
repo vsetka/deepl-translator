@@ -5,7 +5,11 @@ const translationBeginningMap = require('./fixtures/translation-beginning-map');
 
 function handleSplitSentences(options, postBody) {
   return new Promise((resolve, reject) => {
-    const { params: { texts: [inputText] } } = postBody;
+    const {
+      params: {
+        texts: [inputText],
+      },
+    } = postBody;
 
     process.nextTick(
       () =>
@@ -18,7 +22,11 @@ function handleSplitSentences(options, postBody) {
 
 function handleTranslateJobs(options, postBody) {
   return new Promise((resolve, reject) => {
-    const { params: { jobs: [{ raw_en_sentence: inputText }] } } = postBody;
+    const {
+      params: {
+        jobs: [{ raw_en_sentence: inputText }],
+      },
+    } = postBody;
 
     process.nextTick(
       () =>
@@ -51,7 +59,9 @@ function handleTranslateBeginningJobs(options, postBody) {
 function handleAlternativeJobs(option, postBody) {
   return new Promise((resolve, reject) => {
     const {
-      params: { jobs: [{ de_sentence_beginning: beginning }] },
+      params: {
+        jobs: [{ de_sentence_beginning: beginning }],
+      },
     } = postBody;
 
     process.nextTick(
