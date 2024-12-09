@@ -1,3 +1,5 @@
+**Repository not maintained**
+
 # deepl-translator
 
 [![Coverage Status](https://coveralls.io/repos/github/vsetka/deepl-translator/badge.svg?branch=master)](https://coveralls.io/github/vsetka/deepl-translator?branch=master)
